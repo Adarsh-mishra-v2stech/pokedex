@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PokemonSearch from "../components/PokemonSearch";
 import { usePokemonList, useSearchPokemon } from "../hooks/usePokemon";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Empty, Spin, Row, Col } from "antd";
+import { Empty, Spin, Row, Col, Space } from "antd";
 import PokemonCard from "../components/PokeonCard";
 import ScrollToTop from "../components/ScrollToTop";
 
@@ -54,18 +54,18 @@ const PokemonListing = () => {
   return (
     <div>
       <PokemonSearch
-        onSearch={setSearchQuery}
+        setSearchQuery={setSearchQuery}
         handleQuerySearch={handleQuerySearch}
       />
       {isLoading ? (
         <div style={{ textAlign: "center", padding: "40px" }}>
           <Spin size="large" />
         </div>
-      ) : pokemonList!.length === 0 ? (
+      ) : pokemonList?.length === 0 ? (
         <Empty description="No Pokémon found" style={{ margin: "40px 0" }} />
       ) : (
         <InfiniteScroll
-          dataLength={pokemonList!.length}
+          dataLength={pokemonList?.length}
           next={fetchNextPage}
           hasMore={!searchQuery && !!hasNextPage}
           loader={
@@ -75,7 +75,8 @@ const PokemonListing = () => {
           }
           style={{ overflow: "visible" }}
         >
-          <Row
+          {/* <Space style={{ width: "100%" }} size="large" direction="vertical"> */}
+          <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -86,11 +87,10 @@ const PokemonListing = () => {
             }}
           >
             {pokemonList?.map((pokemon) => (
-              <Col key={pokemon?.name}>
-                <PokemonCard name={pokemon?.name} />
-              </Col>
+              <PokemonCard key={pokemon?.name} name={pokemon?.name} />
             ))}
-          </Row>
+          </div>
+          {/* </Space> */}
         </InfiniteScroll>
       )}
       {scrollTop && <ScrollToTop scrollToTop={scrollToTop} />}

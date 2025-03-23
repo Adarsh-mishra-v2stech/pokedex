@@ -5,21 +5,14 @@ import { SearchOutlined } from "@ant-design/icons";
 import { styles } from "./style";
 
 const PokemonSearch = ({
-  onSearch,
+  setSearchQuery,
   handleQuerySearch,
 }: {
-  onSearch: (query: string) => void;
+  setSearchQuery: (query: string) => void;
   handleQuerySearch: () => void;
 }) => {
-  const [query, setQuery] = useState("");
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
-
-  const handleClick = () => {
-    onSearch(query);
-    handleQuerySearch();
+    setSearchQuery(e.target.value);
   };
 
   return (
@@ -32,7 +25,7 @@ const PokemonSearch = ({
           style={{ ...styles.input, border: "none", boxShadow: "none" }}
         />
         <Button
-          onClick={handleClick}
+          onClick={handleQuerySearch}
           type="primary"
           icon={<SearchOutlined />}
           style={styles.searchButton}
