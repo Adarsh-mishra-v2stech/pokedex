@@ -38,6 +38,6 @@ export const useSearchPokemon = (query: string) => {
   return useQuery({
     queryKey: ["pokemonSearch", query],
     queryFn: () => searchPokemon(query),
-    enabled: false,
+    enabled: !!query,
   });
 };

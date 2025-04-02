@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import PokemonSearch from "../components/PokemonSearch";
 import { usePokemonList, useSearchPokemon } from "../hooks/usePokemon";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Empty, Spin, Row, Col, Space } from "antd";
-import PokemonCard from "../components/PokeonCard";
+import { Empty, Spin, Space, Layout } from "antd";
+import PokemonCard from "../components/PokemonCard";
 import ScrollToTop from "../components/ScrollToTop";
 
 const PokemonListing = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [scrollTop, setScrollTop] = useState(false);
+
+  const { Content } = Layout;
 
   const {
     data: infiniteData,
@@ -23,10 +25,12 @@ const PokemonListing = () => {
     refetch,
   } = useSearchPokemon(searchQuery);
 
-  const isLoading = isLoadingList || isLoadingSearch;
   const pokemonList = searchQuery
     ? searchData?.results
     : infiniteData?.pages?.flatMap((page) => page.results) || [];
+
+  const isLoading =
+    isLoadingList || isLoadingSearch || pokemonList?.length === 0;
 
   const handleQuerySearch = () => {
     if (searchQuery) {
@@ -52,7 +56,7 @@ const PokemonListing = () => {
   };
 
   return (
-    <div>
+    <Content>
       <PokemonSearch
         setSearchQuery={setSearchQuery}
         handleQuerySearch={handleQuerySearch}
@@ -65,7 +69,7 @@ const PokemonListing = () => {
         <Empty description="No Pokémon found" style={{ margin: "40px 0" }} />
       ) : (
         <InfiniteScroll
-          dataLength={pokemonList?.length}
+          dataLength={pokemonList?.length || 0}
           next={fetchNextPage}
           hasMore={!searchQuery && !!hasNextPage}
           loader={
@@ -75,8 +79,7 @@ const PokemonListing = () => {
           }
           style={{ overflow: "visible" }}
         >
-          {/* <Space style={{ width: "100%" }} size="large" direction="vertical"> */}
-          <div
+          <Space
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -89,12 +92,11 @@ const PokemonListing = () => {
             {pokemonList?.map((pokemon) => (
               <PokemonCard key={pokemon?.name} name={pokemon?.name} />
             ))}
-          </div>
-          {/* </Space> */}
+          </Space>
         </InfiniteScroll>
       )}
       {scrollTop && <ScrollToTop scrollToTop={scrollToTop} />}
-    </div>
+    </Content>
   );
 };
 

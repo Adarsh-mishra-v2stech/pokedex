@@ -11,8 +11,9 @@ const PokemonSearch = ({
   setSearchQuery: (query: string) => void;
   handleQuerySearch: () => void;
 }) => {
+  const [search, setSearch] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
+    setSearch(e.target.value);
   };
 
   return (
@@ -25,7 +26,10 @@ const PokemonSearch = ({
           style={{ ...styles.input, border: "none", boxShadow: "none" }}
         />
         <Button
-          onClick={handleQuerySearch}
+          onClick={() => {
+            setSearchQuery(search);
+            handleQuerySearch();
+          }}
           type="primary"
           icon={<SearchOutlined />}
           style={styles.searchButton}

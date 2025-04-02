@@ -45,3 +45,13 @@ export interface PokemonSpecies {
     };
   }[];
 }
+
+export interface pokemonType {
+  type: {
+    name: string;
+  };
+}
+
+export interface Species {
+  flavor_text_entries: { flavor_text: string; language: { name: string } }[];
+}
